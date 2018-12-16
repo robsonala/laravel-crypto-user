@@ -13,14 +13,14 @@ class CryptoUserProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(Filesystem $filesystem)
     {
         $this->publishes([
             __DIR__.'/../config/crypto-user.php' => config_path('crypto-user.php'),
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../database/migrations/create_crypto_user_tables.php.stub' => $this->getMigrationFileName($filesystem),
+            __DIR__.'/../database/migrations/create_crypto_user_tables.php.stub' => database_path(sprintf('migrations/%s_%s_%s_000000_create_crypto_user_tables.php', date('Y'), date('m'), date('d')))
         ], 'migrations');
     }
 
@@ -36,33 +36,5 @@ class CryptoUserProvider extends ServiceProvider
             'crypto-user'
         );
 
-        /*
-        |--------------------------------------------------------------------------
-        | Register the Services
-        |--------------------------------------------------------------------------
-        */
-
-        $this->app->singleton('CryptoUser', function () {
-            return new CryptoUser();
-        });
-
-        $this->app->alias(CryptoUser::class, 'CryptoUser');
-
-    } 
-
-    /**
-     * Returns existing migration file if found, else uses the current timestamp.
-     *
-     * @param Filesystem $filesystem
-     * @return string
-     */
-    protected function getMigrationFileName(Filesystem $filesystem): string
-    {
-        $timestamp = date('Y_m_d_His');
-        return Collection::make($this->app->databasePath().DIRECTORY_SEPARATOR.'migrations'.DIRECTORY_SEPARATOR)
-            ->flatMap(function ($path) use ($filesystem) {
-                return $filesystem->glob($path.'*_create_crypto_user_tables.php');
-            })->push($this->app->databasePath()."/migrations/{$timestamp}_create_crypto_user_tables.php")
-            ->first();
     }
 }

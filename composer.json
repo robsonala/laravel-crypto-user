@@ -1,5 +1,6 @@
 {
-    "name": "robsonala/laravel-crypto-user",
+    "name": "robsonala/laravel-crypto-user_",
+    "version": "0.1",
     "description": "Cryptography tools for Laravel linked with User's table including Eloquent support",
     "type": "library",
     "license": "MIT",
@@ -9,7 +10,7 @@
             "email": "robson.alviani@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {
         "php": ">=5.4.0",
         "illuminate/database": "~5.2.0|~5.3.0|~5.4.0|~5.5.0|~5.6.0|~5.7.0",

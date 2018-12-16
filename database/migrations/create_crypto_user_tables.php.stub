@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePermissionTables extends Migration
+class CreateCryptoUserTables extends Migration
 {
     /**
      * Run the migrations.
@@ -21,6 +21,7 @@ class CreatePermissionTables extends Migration
             $table->string('passphrase');
             $table->text('private_key');
             $table->text('public_key');
+            $table->timestamps();
 
             $table->foreign('user_id')
                 ->references('id')

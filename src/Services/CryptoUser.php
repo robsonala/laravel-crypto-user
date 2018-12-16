@@ -1,60 +1,37 @@
 <?php
 namespace Robsonala\CryptoUser\Services;
 
-use phpseclib\Crypt\RSA;
 use Illuminate\Encryption\Encrypter;
+use Illuminate\Support\Facades\Session;
 
 class CryptoUser
 {
+    const PASSPHRASE_SESSION = "ROBSONALA_CRYPTOUSER_PASSPHRASE";
 
-    public static function generateKeyPair($password)
+    public static function setSessionPassphrase($value = null)
     {
-        $rsa = new RSA();
- 
-        $rsa->setPassword($password);
-        $rsa->setPrivateKeyFormat(env('crypto-user.rsa_private_format'));
-        $rsa->setPublicKeyFormat(env('crypto-user.rsa_public_format'));
-        $rsa->createKey();
-
-        return (object)[
-            'private' => $rsa->getPrivateKey(),
-            'public' => $rsa->getPublicKey()
-        ];
-    }
-
-    public static function updatePasswordKeyPair($privateKey, $oldPassword, $newPassword)
-    {
-        $rsa = new RSA();
- 
-        $rsa->setPassword($oldPassword);
-        $rsa->loadKey($privateKey);
-
-        $rsa->setPassword($newPassword);
-
-        return (object)[
-            'private' => $rsa->getPrivateKey(),
-            'public' => $rsa->getPublicKey()
-        ];
-    }
-
-    public static function encryptText($value, $passphrase = null)
-    {
-        if (!$passphrase) {
-            $passphrase = env('crypto-user.rsa_default_key');
+        if (!$value) {
+            $value = substr(hash('sha512',rand()),0,32);
         }
 
-        $crypter = new Encrypter($passphrase);
+        Session::put(self::PASSPHRASE_SESSION, $value);
+    }
+
+    public static function getSessionPassphrase()
+    {
+        return Session::get(self::PASSPHRASE_SESSION);
+    }
+
+    public static function encryptText($value)
+    {
+        $crypter = new Encrypter(self::getSessionPassphrase(), 'AES-256-CBC');
 
         return $crypter->encrypt($value);
     }
 
-    public static function decryptText($value, $passphrase = null)
+    public static function decryptText($value)
     {
-        if (!$passphrase) {
-            $passphrase = env('crypto-user.rsa_default_key');
-        }
-
-        $crypter = new Encrypter($passphrase);
+        $crypter = new Encrypter(self::getSessionPassphrase(), 'AES-256-CBC');
 
         return $crypter->decrypt($value);
     }
