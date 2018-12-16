@@ -1,7 +1,6 @@
 <?php
 namespace Robsonala\CryptoUser\Traits;
 
-use Illuminate\Contracts\Encryption\DecryptException;
 use Robsonala\CryptoUser\Services\CryptoUser;
 
 trait CryptData
@@ -14,11 +13,8 @@ trait CryptData
     {
         $value = parent::getAttribute($key);
         
-        try {
-            if (array_key_exists($key, array_flip($this->crypt_attributes))) {
-                $value = CryptoUser::decryptText($value);
-            }
-        } catch (DecryptException $e) {
+        if (array_key_exists($key, array_flip($this->crypt_attributes))) {
+            $value = CryptoUser::decryptText($value);
         }
 
         return $value;

@@ -13,17 +13,33 @@ class CreateCryptoUserTables extends Migration
      */
     public function up()
     {
-        $cryptoTable = config('crypto-user.table_name');
+        $tables = config('crypto-user.tables');
         $userTable = config('crypto-user.user.table_name');
 
-        Schema::create($cryptoTable, function (Blueprint $table) use ($userTable) {
+        Schema::create($tables['keys'], function (Blueprint $table) use ($userTable) {
             $table->unsignedInteger('user_id');
-            $table->string('passphrase');
             $table->text('private_key');
             $table->text('public_key');
             $table->timestamps();
 
             $table->foreign('user_id')
+                ->references('id')
+                ->on($userTable)
+                ->onDelete('cascade');
+        });
+
+        Schema::create($tables['passphrases'], function (Blueprint $table) use ($userTable) {
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('related_user_id');
+            $table->string('passphrase');
+            $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on($userTable)
+                ->onDelete('cascade');
+
+            $table->foreign('related_user_id')
                 ->references('id')
                 ->on($userTable)
                 ->onDelete('cascade');
@@ -37,8 +53,9 @@ class CreateCryptoUserTables extends Migration
      */
     public function down()
     {
-        $cryptoTable = config('crypto-user.table_name');
+        $tables = config('crypto-user.tables');
 
-        Schema::drop($cryptoTable);
+        Schema::drop($tables['keys']);
+        Schema::drop($tables['passphrases']);
     }
 }

@@ -14,6 +14,16 @@ class KeyPair
         $this->rsaPrivate = new RSA();
     }
 
+    protected function getPublic()
+    {
+        return $this->rsaPublic;
+    }
+
+    protected function getPrivate()
+    {
+        return $this->rsaPrivate;
+    }
+
     public function generate($password)
     {
         $rsa = new RSA();
@@ -29,39 +39,46 @@ class KeyPair
         return $this;
     }
 
+    public function setNewPassword($password)
+    {
+        $this->getPrivate()->setPassword($password);
+
+        return $this;
+    }
+
     public function loadPublic($key)
     {
-        $this->rsaPublic->loadKey($key);
+        $this->getPublic()->loadKey($key);
 
         return $this;
     }
 
     public function loadPrivate($key, $password)
     {
-        $this->rsaPrivate->setPassword($password);
-        $this->rsaPrivate->loadKey($key);
+        $this->getPrivate()->setPassword($password);
+        $this->getPrivate()->loadKey($key);
 
         return $this;
     }
 
     public function encrypt($value)
     {
-        return $this->rsaPublic->encrypt($value);
+        return $this->getPublic()->encrypt($value);
     }
 
     public function decrypt($value)
     {
-        return $this->rsaPrivate->decrypt($value);
+        return $this->getPrivate()->decrypt($value);
     }
 
     public function getPublicKey()
     {
-        return $this->rsaPublic->getPublicKey();
+        return $this->getPublic()->getPublicKey();
     }
 
     public function getPrivateKey()
     {
-        return $this->rsaPrivate->getPrivateKey();
+        return $this->getPrivate()->getPrivateKey();
     }
 
 }

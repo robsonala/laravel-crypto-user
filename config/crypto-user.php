@@ -16,8 +16,10 @@ return [
      | Database
      |--------------------------------------------------------------------------
      */
-    'table_name' => 'user_crypto',
-    'model' => Robsonala\CryptoUser\Models\CryptoUser::class,
+    'tables' => [
+        'keys' => 'user_crypto_keys',
+        'passphrases' => 'user_crypto_passphrases'
+    ],
 
     /*
      |--------------------------------------------------------------------------
