@@ -1,0 +1,43 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreatePermissionTables extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        $cryptoTable = config('crypto-user.table_name');
+        $userTable = config('crypto-user.user.table_name');
+
+        Schema::create($cryptoTable, function (Blueprint $table) use ($userTable) {
+            $table->unsignedInteger('user_id');
+            $table->string('passphrase');
+            $table->text('private_key');
+            $table->text('public_key');
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on($userTable)
+                ->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        $cryptoTable = config('crypto-user.table_name');
+
+        Schema::drop($cryptoTable);
+    }
+}
