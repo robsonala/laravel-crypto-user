@@ -1,72 +1,11 @@
-# Example usage:
+# Laravel Crypto User
+Cryptography tools for Laravel linked with User's table including Eloquent support
 
-## RegisterController.php
-```
-...
-use Robsonala\CryptoUser\Services\KeyPair;
-use Robsonala\CryptoUser\Services\CryptoUser;
-use Robsonala\CryptoUser\Models\CryptoKeys;
-use Robsonala\CryptoUser\Models\CryptoPassphrases;
-...
-$keyPair = new KeyPair();
-$keyPair->generate($data['password']);
+***
 
-CryptoUser::setSessionPassphrase();
+## Usage:
 
-CryptoKeys::create([
-    'user_id' => $user->id, 
-    'private_key' => $keyPair->getPrivateKey(),
-    'public_key' => $keyPair->getPublicKey(),
-]);
-
-CryptoPassphrases::create([
-    'user_id' => $user->id, 
-    'related_user_id' => $user->id, 
-    'passphrase' => $keyPair->encrypt(CryptoUser::getSessionPassphrase()),
-]);
-...
-```
-
-## LoginController.php
-```
-...
-use Robsonala\CryptoUser\Services\KeyPair;
-use Robsonala\CryptoUser\Services\CryptoUser;
-...
-$keyPair = new KeyPair();
-$keyPair->loadPublic($user->cryptoKeys->public_key);
-$keyPair->loadPrivate($user->cryptoKeys->private_key, $request->password);
-
-CryptoUser::setSessionPassphrase($keyPair->decrypt($user->cryptoPassphrase->passphrase));
-...
-```
-
-## [ANY].php // Changing password
-```
-...
-use Robsonala\CryptoUser\Services\KeyPair;
-use Robsonala\CryptoUser\Models\CryptoKeys;
-...
-$new = $request->get('new-password');
-
-$user = Auth::user();
-
-$keyPair = new KeyPair();
-$keyPair->loadPublic($user->cryptoKeys->public_key);
-$keyPair->loadPrivate($user->cryptoKeys->private_key, $old);
-
-$keyPair->setNewPassword($new);
-
-CryptoKeys::where('user_id', $user->id)->delete();
-CryptoKeys::create([
-    'user_id' => $user->id, 
-    'private_key' => $keyPair->getPrivateKey(),
-    'public_key' => $keyPair->getPublicKey(),
-]);
-...
-```
-
-## User.php (Model)
+### STEP 1 - Set 'UserEncrypt Trait' on User's model
 ```
 ...
 use Robsonala\CryptoUser\Traits\UserEncrypt;
@@ -75,7 +14,39 @@ use Notifiable, UserEncrypt;
 ...
 ```
 
-## Any Model
+### STEP 2 - Create register key for users (RegisterController.php)
+```
+...
+use Robsonala\CryptoUser\Services\Actions;
+...
+protected function create(array $data)
+{
+    $user = User::create([
+        'name' => $data['name'],
+        'email' => $data['email'],
+        'password' => bcrypt($data['password']),
+    ]);
+
+    Actions::register($user, $data['password']);
+
+    return $user;
+}
+...
+```
+
+### STEP 3 - Set key on memory when user login(LoginController.php)
+```
+...
+use Robsonala\CryptoUser\Services\Actions;
+...
+protected function authenticated($request, $user)
+{
+    Actions::login($user, $request->password);
+}
+...
+```
+
+## STEP 4 - Set the 'CryptData Trait' on every desired model
 ```
 ...
 use Robsonala\CryptoUser\Traits\CryptData;
@@ -87,3 +58,22 @@ protected $crypt_attributes = [
 ];
 ...
 ```
+
+## STEP 5 - You must the key always you update the user's password
+```
+...
+use Robsonala\CryptoUser\Services\Actions;
+...
+$old = $request->get('current-password');
+$new = $request->get('new-password');
+
+$user = Auth::user();
+
+Actions::updatePassword($user, $old, $new);
+...
+```
+
+License
+----
+
+MIT
