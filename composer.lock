@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2222481a6df5a2b2e2fc9cd5ea42ed79",
+    "content-hash": "f4d99028b120d5bf4120c10480965813",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -478,12 +478,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "7c183bcd2d0a0b225c11e184c7690e9ea052bbb2"
+                "reference": "fff0728fd4d325945af1633c7f762f7b13731c3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/7c183bcd2d0a0b225c11e184c7690e9ea052bbb2",
-                "reference": "7c183bcd2d0a0b225c11e184c7690e9ea052bbb2",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/fff0728fd4d325945af1633c7f762f7b13731c3f",
+                "reference": "fff0728fd4d325945af1633c7f762f7b13731c3f",
                 "shasum": ""
             },
             "require": {
@@ -616,7 +616,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2018-12-15T14:40:14+00:00"
+            "time": "2018-12-17T19:31:59+00:00"
         },
         {
             "name": "laravel/nexmo-notification-channel",
@@ -1804,12 +1804,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "7dac0f8df415100d5d4ecd71213d794546d65d0e"
+                "reference": "3f8a62ad1763ab3a43b1e30d90a6f443bab15fa5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/7dac0f8df415100d5d4ecd71213d794546d65d0e",
-                "reference": "7dac0f8df415100d5d4ecd71213d794546d65d0e",
+                "url": "https://api.github.com/repos/symfony/console/zipball/3f8a62ad1763ab3a43b1e30d90a6f443bab15fa5",
+                "reference": "3f8a62ad1763ab3a43b1e30d90a6f443bab15fa5",
                 "shasum": ""
             },
             "require": {
@@ -1865,7 +1865,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-12-13T12:43:21+00:00"
+            "time": "2018-12-17T13:51:43+00:00"
         },
         {
             "name": "symfony/contracts",
@@ -2050,12 +2050,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "a6ec602b1c247fd67f9104642f397bc70667df84"
+                "reference": "a0c96c8771a003c058ef2e4366055688be8bd1df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/a6ec602b1c247fd67f9104642f397bc70667df84",
-                "reference": "a6ec602b1c247fd67f9104642f397bc70667df84",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/a0c96c8771a003c058ef2e4366055688be8bd1df",
+                "reference": "a0c96c8771a003c058ef2e4366055688be8bd1df",
                 "shasum": ""
             },
             "require": {
@@ -2106,7 +2106,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2018-12-13T12:43:21+00:00"
+            "time": "2018-12-17T13:49:19+00:00"
         },
         {
             "name": "symfony/finder",
@@ -2217,12 +2217,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "a91b2522475ac55a7d312961645cf6a2b57bea0c"
+                "reference": "69e072692482778df08f4662af2de8cf032cfdfb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/a91b2522475ac55a7d312961645cf6a2b57bea0c",
-                "reference": "a91b2522475ac55a7d312961645cf6a2b57bea0c",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/69e072692482778df08f4662af2de8cf032cfdfb",
+                "reference": "69e072692482778df08f4662af2de8cf032cfdfb",
                 "shasum": ""
             },
             "require": {
@@ -2298,7 +2298,7 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "https://symfony.com",
-            "time": "2018-12-13T12:43:21+00:00"
+            "time": "2018-12-17T13:49:19+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2527,12 +2527,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/routing.git",
-                "reference": "ec8e9f67c281ad7f81a5878d6bf3ae5331b11309"
+                "reference": "36a8cd34efd35f8273f2915b129f0c2f0bc79605"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/routing/zipball/ec8e9f67c281ad7f81a5878d6bf3ae5331b11309",
-                "reference": "ec8e9f67c281ad7f81a5878d6bf3ae5331b11309",
+                "url": "https://api.github.com/repos/symfony/routing/zipball/36a8cd34efd35f8273f2915b129f0c2f0bc79605",
+                "reference": "36a8cd34efd35f8273f2915b129f0c2f0bc79605",
                 "shasum": ""
             },
             "require": {
@@ -2596,7 +2596,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2018-12-13T12:43:21+00:00"
+            "time": "2018-12-17T13:49:19+00:00"
         },
         {
             "name": "symfony/translation",
@@ -2677,12 +2677,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "f74fd0792403b8cf1ff8acbe71f23e01230a7901"
+                "reference": "7a430697e4a1bea94c5062c4cf4ae93683c54840"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/f74fd0792403b8cf1ff8acbe71f23e01230a7901",
-                "reference": "f74fd0792403b8cf1ff8acbe71f23e01230a7901",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/7a430697e4a1bea94c5062c4cf4ae93683c54840",
+                "reference": "7a430697e4a1bea94c5062c4cf4ae93683c54840",
                 "shasum": ""
             },
             "require": {
@@ -2744,7 +2744,7 @@
                 "debug",
                 "dump"
             ],
-            "time": "2018-12-13T12:43:21+00:00"
+            "time": "2018-12-17T13:49:19+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",

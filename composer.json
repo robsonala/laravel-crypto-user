@@ -25,6 +25,14 @@
             "Robsonala\\CryptoUser\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Robsonala\\CryptoUser\\Test\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
     "extra": {
         "laravel": {
             "providers": [
