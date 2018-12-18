@@ -15,8 +15,8 @@ class ServicesKeyPairTest extends TestCase
         $ret = $kp->generate($password);
 
         $this->assertInstanceOf(KeyPair::class, $ret);
-        $this->assertContains("-----BEGIN PUBLIC KEY-----", $kp->getPublicKey());
-        $this->assertContains("-----BEGIN RSA PRIVATE KEY-----", $kp->getPrivateKey());
+        $this->assertStringStartsWith("-----BEGIN PUBLIC KEY-----", $kp->getPublicKey());
+        $this->assertStringStartsWith("-----BEGIN RSA PRIVATE KEY-----", $kp->getPrivateKey());
     }
 
     /** @test */
@@ -26,8 +26,8 @@ class ServicesKeyPairTest extends TestCase
         $ret = $kp->generate();
 
         $this->assertInstanceOf(KeyPair::class, $ret);
-        $this->assertContains("-----BEGIN PUBLIC KEY-----", $kp->getPublicKey());
-        $this->assertContains("-----BEGIN RSA PRIVATE KEY-----", $kp->getPrivateKey());
+        $this->assertStringStartsWith("-----BEGIN PUBLIC KEY-----", $kp->getPublicKey());
+        $this->assertStringStartsWith("-----BEGIN RSA PRIVATE KEY-----", $kp->getPrivateKey());
     }
 
     /** @test */
@@ -76,7 +76,7 @@ class ServicesKeyPairTest extends TestCase
         $ret = $kpNew->loadPrivate($kp->getPrivateKey(), $pw);
 
         $this->assertInstanceOf(KeyPair::class, $ret);
-        $this->assertContains("-----BEGIN RSA PRIVATE KEY-----", $kpNew->getPrivateKey());
+        $this->assertStringStartsWith("-----BEGIN RSA PRIVATE KEY-----", $kpNew->getPrivateKey());
     }
 
     /** @test */
@@ -88,7 +88,7 @@ class ServicesKeyPairTest extends TestCase
         $ret = $kpNew->loadPrivate($kp->getPrivateKey());
 
         $this->assertInstanceOf(KeyPair::class, $ret);
-        $this->assertContains("-----BEGIN RSA PRIVATE KEY-----", $kpNew->getPrivateKey());
+        $this->assertStringStartsWith("-----BEGIN RSA PRIVATE KEY-----", $kpNew->getPrivateKey());
     }
 
     /** @test */

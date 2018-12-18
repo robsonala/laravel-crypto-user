@@ -1,6 +1,9 @@
 # Laravel Crypto User
 Cryptography tools for Laravel linked with User's table including Eloquent support
 
+[![Build Status](https://travis-ci.org/robsonala/laravel-crypto-user.svg?branch=master)](https://travis-ci.org/robsonala/laravel-crypto-user)
+
+
 ***
 
 ## Usage:
