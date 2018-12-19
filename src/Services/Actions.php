@@ -8,9 +8,13 @@ class Actions
 
     public static function login($user, $password)
     {
-        $keyPair = new KeyPair();
-        $keyPair->loadPublic($user->cryptoKeys->public_key);
-        $keyPair->loadPrivate($user->cryptoKeys->private_key, $password);
+        // TODO : Generate keypair if the user doesn't have one
+
+        $keyPair = new KeyPair([
+            'publickey' => $user->cryptoKeys->public_key,
+            'privatekey' => $user->cryptoKeys->private_key,
+            'password' => $password
+        ]);
 
         CryptoUser::setSessionPassphrase($keyPair->decrypt($user->cryptoPassphrase->passphrase));
     }
@@ -37,9 +41,11 @@ class Actions
 
     public static function updatePassword($user, $oldPassword, $newPassword)
     {
-        $keyPair = new KeyPair();
-        $keyPair->loadPublic($user->cryptoKeys->public_key);
-        $keyPair->loadPrivate($user->cryptoKeys->private_key, $oldPassword);
+        $keyPair = new KeyPair([
+            'publickey' => $user->cryptoKeys->public_key,
+            'privatekey' => $user->cryptoKeys->private_key,
+            'password' => $oldPassword
+        ]);
 
         $keyPair->setNewPassword($newPassword);
 

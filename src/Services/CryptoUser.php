@@ -11,7 +11,7 @@ class CryptoUser
     const PASSPHRASE_SESSION = "ROBSONALA_CRYPTOUSER_PASSPHRASE";
     const CIPHER = "AES-256-CBC";
 
-    public static function setSessionPassphrase($value = null)
+    public static function setSessionPassphrase(string $value = null): string
     {
         if (!$value) {
             $value = substr(hash('sha512',rand()), 0, 32);
@@ -26,7 +26,7 @@ class CryptoUser
         return $value;
     }
 
-    public static function getSessionPassphrase()
+    public static function getSessionPassphrase(): string
     {
         if (!Session::has(self::PASSPHRASE_SESSION)) {
             throw new CryptoUserException('Passphrase not set');
@@ -35,13 +35,13 @@ class CryptoUser
         return Crypt::decryptString(Session::get(self::PASSPHRASE_SESSION));
     }
 
-    public static function encryptText($value)
+    public static function encryptText(string $value): string
     {
         return (new Encrypter(self::getSessionPassphrase(), self::CIPHER))
             ->encrypt($value);
     }
 
-    public static function decryptText($value)
+    public static function decryptText(string $value): string
     {
         return (new Encrypter(self::getSessionPassphrase(), self::CIPHER))
             ->decrypt($value);
