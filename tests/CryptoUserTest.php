@@ -3,16 +3,10 @@ namespace Robsonala\CryptoUser\Test;
 
 use Robsonala\CryptoUser\Services\CryptoUser;
 use Robsonala\CryptoUser\Exceptions\CryptoUserException;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Contracts\Encryption\DecryptException;
 
 class CryptoUserTest extends TestCase
 {
-    protected function killPassphraseSession()
-    {
-        Session::forget('ROBSONALA_CRYPTOUSER_PASSPHRASE');
-    }
-
     /** @test */
     public function i_can_create_a_passphrase()
     {

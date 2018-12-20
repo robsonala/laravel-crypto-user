@@ -6,19 +6,21 @@ use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Robsonala\CryptoUser\CryptoUserProvider;
 use Robsonala\CryptoUser\Test\Models\User;
+use Illuminate\Support\Facades\Session;
 
 abstract class TestCase extends Orchestra
 {
-    /** @var \Robsonala\CryptoUser\Test\Models\User */
-    //protected $testUser;
+    
+    protected function killPassphraseSession()
+    {
+        Session::forget('ROBSONALA_CRYPTOUSER_PASSPHRASE');
+    }
 
     public function setUp()
     {
         parent::setUp();
 
         $this->setUpDatabase($this->app);
-
-        //$this->testUser = User::first();
     }
 
     /**
@@ -57,16 +59,26 @@ abstract class TestCase extends Orchestra
      */
     protected function setUpDatabase($app)
     {
-        $app['db']->connection()->getSchemaBuilder()->create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('email')->unique();
-            $table->string('password');
-        });
+        $app['db']
+            ->connection()
+            ->getSchemaBuilder()
+            ->create('users', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('email')->unique();
+                $table->string('password');
+            });
+
+        $app['db']
+            ->connection()
+            ->getSchemaBuilder()
+            ->create('todo', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('title');
+                $table->string('text');
+            });
 
         include_once __DIR__.'/../database/migrations/create_crypto_user_tables.php.stub';
         
         (new \CreateCryptoUserTables())->up();
-
-        //User::create(['email' => 'test@user.com', 'password' => bcrypt('123456')]);
     }
 }
