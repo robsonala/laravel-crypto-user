@@ -5,7 +5,7 @@ use Robsonala\CryptoUser\Services\CryptoUser;
 use Robsonala\CryptoUser\Exceptions\CryptoUserException;
 use Illuminate\Contracts\Encryption\DecryptException;
 
-class CryptoUserTest extends TestCase
+class ServicesCryptoUserTest extends TestCase
 {
     /** @test */
     public function i_can_create_a_passphrase()

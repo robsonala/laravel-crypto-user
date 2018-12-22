@@ -3,7 +3,6 @@ Cryptography tools for Laravel linked with User's table including Eloquent suppo
 
 [![Build Status](https://travis-ci.org/robsonala/laravel-crypto-user.svg?branch=master)](https://travis-ci.org/robsonala/laravel-crypto-user)
 
-
 ***
 
 ## Usage:
@@ -75,6 +74,32 @@ $user = Auth::user();
 Actions::updatePassword($user, $old, $new);
 ...
 ```
+
+## STEP 6 - Share user's passphrase with another user
+```
+...
+use Robsonala\CryptoUser\Services\Actions;
+...
+
+// Owner of the passphrase
+$user = Auth::user();
+$user_passphrase = '...';
+
+// User that will receive the passprhase
+$another_user = User::find(...);
+
+Actions::sharePassphrase($user, $another_user, $user_passphrase);
+...
+```
+
+***
+
+TODO
+----
+* Recover key for another user
+* Create a proper documentation
+
+***
 
 License
 ----

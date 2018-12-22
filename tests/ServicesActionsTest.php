@@ -5,8 +5,9 @@ use Robsonala\CryptoUser\Test\Models\User;
 use Robsonala\CryptoUser\Services\{Actions, CryptoUser, KeyPair};
 use Robsonala\CryptoUser\Exceptions\CryptoUserException;
 use Robsonala\CryptoUser\Models\{CryptoKeys, CryptoPassphrases};
+use Illuminate\Support\Facades\DB;
 
-class ActionsTest extends TestCase
+class ServicesActionsTest extends TestCase
 {
 
     /** @test */
@@ -83,5 +84,42 @@ class ActionsTest extends TestCase
         } catch (CryptoUserException $e) {
             $this->assertTrue(true);
         }
+    }
+
+    /** @test */
+    public function i_can_share_my_passphrase_with_another_user()
+    {
+        $password1 = uniqid();
+        $user1 = User::create(['email' => uniqid() . '@user.com', 'password' => bcrypt($password1)]);
+        $passphrase1 = Actions::register($user1, $password1);
+
+        $password2 = uniqid();
+        $user2 = User::create(['email' => uniqid() . '@user.com', 'password' => bcrypt($password2)]);
+        $passphrase2 = Actions::register($user2, $password2);
+
+        Actions::sharePassphrase($user1, $user2, $passphrase1);
+
+        $items1 = DB::table(config('crypto-user.tables')['passphrases'])
+            ->where('user_id', $user1->id)->get();
+        $items2 = DB::table(config('crypto-user.tables')['passphrases'])
+            ->where('user_id', $user2->id)->get();
+
+        $this->assertCount(1, $items1);
+        $this->assertCount(2, $items2);
+
+        $user2 = User::find($user2->id);
+
+        $keyPair1 = new KeyPair([
+            'privatekey' => $user1->cryptoKeys->private_key,
+            'password' => $password1
+        ]);
+        $keyPair2 = new KeyPair([
+            'privatekey' => $user2->cryptoKeys->private_key,
+            'password' => $password2
+        ]);
+
+        $user1Passprhase = $keyPair2->decrypt($user2->cryptoPassphrasesShared[0]->passphrase);
+
+        $this->assertEquals($passphrase1, $user1Passprhase);
     }
 }

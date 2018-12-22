@@ -9,7 +9,7 @@ use Robsonala\CryptoUser\Exceptions\CryptoUserException;
 use Robsonala\CryptoUser\Traits\CryptData;
 use Robsonala\CryptoUser\Test\Models\Todo;
 
-class CryptDataTest extends TestCase
+class ServicesCryptDataTest extends TestCase
 {
     /** @test */
     public function i_can_encrypt_text()
