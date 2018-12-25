@@ -85,8 +85,8 @@ class Actions
     /**
      * Share my passphrase with another user
      * 
-     * @param Model $passphraseOwner    My user's instance
-     * @param Model $user               User thath will receive the passphrase
+     * @param Model $passphraseOwner    User that will share the passphrase
+     * @param Model $user               User that will receive the passphrase
      * @param string $password          Passphrase
      */
     public static function sharePassphrase(Model $passphraseOwner, Model $user, string $passphrase = ''): void
@@ -103,6 +103,39 @@ class Actions
             'user_id' => $user->id, 
             'related_user_id' => $passphraseOwner->id, 
             'passphrase' => $keyPair->encrypt($passphrase),
+        ]);
+    }
+
+    /**
+     * Recover passphrase for another user
+     * 
+     * @param Model $passphraseOwner    User that want to get the passphrase back
+     * @param Model $user               User that will help
+     * @param string $password          Passphrase
+     */
+    public static function recoverPassphrase(Model $passphraseOwner, Model $user, string $passphrase = ''): void
+    {
+        if (!$passphrase) {
+            $passphrase = CryptoUser::getSessionPassphrase();
+        }
+
+        $keyPairOwner = new KeyPair([
+            'publickey' => $passphraseOwner->cryptoKeys->public_key
+        ]);
+        $keyPairProvider = new KeyPair([
+            'privatekey' => $user->cryptoKeys->private_key,
+            'password' => $passphrase
+        ]);
+
+        $decryptedPassphrase = $keyPairProvider->decrypt($user->cryptoPassphrasesShared($passphraseOwner->id)->passphrase);
+
+        CryptoPassphrases::where('user_id', $passphraseOwner->id)
+            ->where('related_user_id', $passphraseOwner->id)
+            ->delete();
+        CryptoPassphrases::create([
+            'user_id' => $passphraseOwner->id, 
+            'related_user_id' => $passphraseOwner->id, 
+            'passphrase' => $keyPairOwner->encrypt($decryptedPassphrase)
         ]);
     }
 

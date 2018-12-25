@@ -14,7 +14,7 @@ class ServicesActionsTest extends TestCase
     public function i_can_register()
     {
         $password = uniqid();
-        $user = User::create(['email' => uniqid() . '@user.com', 'password' => bcrypt($password)]);
+        $user = $this->createUser(['password' => $password]);
 
         Actions::register($user, $password);
 
@@ -33,7 +33,7 @@ class ServicesActionsTest extends TestCase
         $password = uniqid();
         $passphrase = substr(hash('sha512',rand()), 0, 32);
 
-        $user = User::create(['email' => uniqid() . '@user.com', 'password' => bcrypt($password)]);
+        $user = $this->createUser(['password' => $password]);
 
         $keyPair = new KeyPair();
         $keyPair->generate($password);
@@ -59,7 +59,7 @@ class ServicesActionsTest extends TestCase
     public function i_can_update_password()
     {
         $password = uniqid();
-        $user = User::create(['email' => uniqid() . '@user.com', 'password' => bcrypt($password)]);
+        $user = $this->createUser(['password' => $password]);
         Actions::register($user, $password);
 
         $newPassword = uniqid();
@@ -90,11 +90,11 @@ class ServicesActionsTest extends TestCase
     public function i_can_share_my_passphrase_with_another_user()
     {
         $password1 = uniqid();
-        $user1 = User::create(['email' => uniqid() . '@user.com', 'password' => bcrypt($password1)]);
+        $user1 = $this->createUser(['password' => $password1]);
         $passphrase1 = Actions::register($user1, $password1);
 
         $password2 = uniqid();
-        $user2 = User::create(['email' => uniqid() . '@user.com', 'password' => bcrypt($password2)]);
+        $user2 = $this->createUser(['password' => $password2]);
         $passphrase2 = Actions::register($user2, $password2);
 
         Actions::sharePassphrase($user1, $user2, $passphrase1);
@@ -109,10 +109,6 @@ class ServicesActionsTest extends TestCase
 
         $user2 = User::find($user2->id);
 
-        $keyPair1 = new KeyPair([
-            'privatekey' => $user1->cryptoKeys->private_key,
-            'password' => $password1
-        ]);
         $keyPair2 = new KeyPair([
             'privatekey' => $user2->cryptoKeys->private_key,
             'password' => $password2
@@ -121,5 +117,36 @@ class ServicesActionsTest extends TestCase
         $user1Passprhase = $keyPair2->decrypt($user2->cryptoPassphrasesShared[0]->passphrase);
 
         $this->assertEquals($passphrase1, $user1Passprhase);
+    }
+
+    /** @test */
+    public function i_can_reset_another_users_passphrase()
+    {
+        $password1 = uniqid();
+        $user1 = $this->createUser(['password' => $password1]);
+        $passphrase1 = Actions::register($user1, $password1);
+
+        $password2 = uniqid();
+        $user2 = $this->createUser(['password' => $password2]);
+        $passphrase2 = Actions::register($user2, $password2);
+
+        Actions::sharePassphrase($user1, $user2, $passphrase1);
+
+        $user1 = User::find($user1->id);
+        $user2 = User::find($user2->id);
+
+        Actions::recoverPassphrase($user1, $user2, $password2);
+
+        $user1 = User::find($user1->id);
+
+        $keyPair1 = new KeyPair([
+            'privatekey' => $user1->cryptoKeys->private_key,
+            'password' => $password1
+        ]);
+
+        $newPassphrase1 = $keyPair1->decrypt($user1->cryptoPassphrase->passphrase);
+
+        $this->assertEquals($passphrase1, $newPassphrase1);
+
     }
 }

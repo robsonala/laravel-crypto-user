@@ -12,8 +12,8 @@ class TraitsUserEncryptTest extends TestCase
     /** @test */
     public function i_can_see_my_keys()
     {
-        $user = User::create(['email' => uniqid() . '@user.com', 'password' => bcrypt(uniqid())]);
-
+        $user = $this->createUser();
+        
         $private = uniqid();
         $public = uniqid();
         CryptoKeys::create([
@@ -31,7 +31,7 @@ class TraitsUserEncryptTest extends TestCase
     /** @test */
     public function i_can_see_my_passphrase()
     {
-        $user = User::create(['email' => uniqid() . '@user.com', 'password' => bcrypt(uniqid())]);
+        $user = $this->createUser();
 
         $passphrase = uniqid();
         CryptoPassphrases::create([
@@ -48,10 +48,10 @@ class TraitsUserEncryptTest extends TestCase
     /** @test */
     public function i_can_see_passphrase_that_have_been_shared_with_me()
     {
-        $user1 = User::create(['email' => uniqid() . '@user.com', 'password' => bcrypt(uniqid())]);
-        $user2 = User::create(['email' => uniqid() . '@user.com', 'password' => bcrypt(uniqid())]);
-        $user3 = User::create(['email' => uniqid() . '@user.com', 'password' => bcrypt(uniqid())]);
-        
+        $user1 = $this->createUser();
+        $user2 = $this->createUser();
+        $user3 = $this->createUser();
+
         CryptoPassphrases::create([
             'user_id' => $user1->id,
             'related_user_id' => $user1->id,
@@ -92,5 +92,12 @@ class TraitsUserEncryptTest extends TestCase
         $this->assertCount(2, $user1->cryptoPassphrasesShared);
         $this->assertCount(0, $user2->cryptoPassphrasesShared);
         $this->assertCount(1, $user3->cryptoPassphrasesShared);
+
+        // Single items
+        $item = $user1->cryptoPassphrasesShared($user2->id);
+        $this->assertEquals($user2->id, $item->related_user_id);
+
+        $item = $user1->cryptoPassphrasesShared($user3->id);
+        $this->assertEquals($user3->id, $item->related_user_id);
     }
 }

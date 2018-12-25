@@ -6,15 +6,11 @@ use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Robsonala\CryptoUser\CryptoUserProvider;
 use Robsonala\CryptoUser\Test\Models\User;
-use Illuminate\Support\Facades\Session;
+use Robsonala\CryptoUser\Test\Helpers\Unit;
 
 abstract class TestCase extends Orchestra
 {
-    
-    protected function killPassphraseSession()
-    {
-        Session::forget('ROBSONALA_CRYPTOUSER_PASSPHRASE');
-    }
+    use Unit;
 
     public function setUp()
     {

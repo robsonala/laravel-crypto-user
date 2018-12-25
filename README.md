@@ -5,7 +5,7 @@ Cryptography tools for Laravel linked with User's table including Eloquent suppo
 
 ***
 
-## Usage:
+## Tutorial:
 
 ### STEP 1 - Set 'UserEncrypt Trait' on User's model
 ```
@@ -60,8 +60,9 @@ protected $crypt_attributes = [
 ];
 ...
 ```
+## Extra features:
 
-## STEP 5 - You must the key always you update the user's password
+## You must the key always you update the user's password
 ```
 ...
 use Robsonala\CryptoUser\Services\Actions;
@@ -75,7 +76,7 @@ Actions::updatePassword($user, $old, $new);
 ...
 ```
 
-## STEP 6 - Share user's passphrase with another user
+## Share user's passphrase with another user
 ```
 ...
 use Robsonala\CryptoUser\Services\Actions;
@@ -96,7 +97,6 @@ Actions::sharePassphrase($user, $another_user, $user_passphrase);
 
 TODO
 ----
-* Recover key for another user
 * Create a proper documentation
 
 ***

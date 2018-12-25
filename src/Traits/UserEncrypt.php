@@ -17,10 +17,16 @@ trait UserEncrypt
             ->where('related_user_id', $this->id);
     }
 
-    public function cryptoPassphrasesShared()
+    public function cryptoPassphrasesShared(int $userId = null)
     {
-        return $this->hasMany(CryptoPassphrases::class)
-            ->whereNotIn('related_user_id', [$this->id]);
-            //->whereNot('related_user_id', $this->id); TODO: check why it's not working :)
+        if ($userId) {
+            return $this->hasOne(CryptoPassphrases::class)
+                ->whereIn('related_user_id', [$userId])
+                ->first();
+        } else {
+            return $this->hasMany(CryptoPassphrases::class)
+                ->whereNotIn('related_user_id', [$this->id]);
+                //->whereNot('related_user_id', $this->id); TODO: check why it's not working :)
+        }
     }
 }
