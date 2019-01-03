@@ -64,7 +64,7 @@ class Actions
      * @param string $oldPassword   Old password
      * @param string $newPassword   New password
      */
-    public static function updatePassword(Model $user, string $oldPassword, string $newPassword): void
+    public static function updatePassword(Model $user, string $oldPassword, string $newPassword)
     {
         $keyPair = new KeyPair([
             'publickey' => $user->cryptoKeys->public_key,
@@ -89,7 +89,7 @@ class Actions
      * @param Model $user               User that will receive the passphrase
      * @param string $password          Passphrase
      */
-    public static function sharePassphrase(Model $passphraseOwner, Model $user, string $passphrase = ''): void
+    public static function sharePassphrase(Model $passphraseOwner, Model $user, string $passphrase = '')
     {
         if (!$passphrase) {
             $passphrase = CryptoUser::getSessionPassphrase();
@@ -113,7 +113,7 @@ class Actions
      * @param Model $user               User that will help
      * @param string $password          Passphrase
      */
-    public static function recoverPassphrase(Model $passphraseOwner, Model $user, string $passphrase = ''): void
+    public static function recoverPassphrase(Model $passphraseOwner, Model $user, string $passphrase = '')
     {
         if (!$passphrase) {
             $passphrase = CryptoUser::getSessionPassphrase();
