@@ -17,6 +17,9 @@ class Actions
     public static function login(Model $user, string $password): string
     {
         // TODO : Generate keypair if the user doesn't have one
+        if (!isset($user->cryptoKeys)) {
+            return "";
+        }
 
         $keyPair = new KeyPair([
             'publickey' => $user->cryptoKeys->public_key,
@@ -66,6 +69,10 @@ class Actions
      */
     public static function updatePassword(Model $user, string $oldPassword, string $newPassword)
     {
+        if (!isset($user->cryptoKeys)) {
+            return;
+        }
+
         $keyPair = new KeyPair([
             'publickey' => $user->cryptoKeys->public_key,
             'privatekey' => $user->cryptoKeys->private_key,
@@ -91,6 +98,10 @@ class Actions
      */
     public static function sharePassphrase(Model $passphraseOwner, Model $user, string $passphrase = '')
     {
+        if (!isset($user->cryptoKeys)) {
+            return;
+        }
+
         if (!$passphrase) {
             $passphrase = CryptoUser::getSessionPassphrase();
         }
@@ -115,6 +126,10 @@ class Actions
      */
     public static function recoverPassphrase(Model $passphraseOwner, Model $user, string $passphrase = '')
     {
+        if (!isset($user->cryptoKeys) || !isset($passphraseOwner->cryptoKeys)) {
+            return;
+        }
+
         if (!$passphrase) {
             $passphrase = CryptoUser::getSessionPassphrase();
         }
