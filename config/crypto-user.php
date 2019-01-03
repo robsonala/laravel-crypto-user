@@ -27,6 +27,7 @@ return [
      |--------------------------------------------------------------------------
      */
     'user' => [
-        'model' => env('auth.providers.users.model')
+        'model' => env('auth.providers.users.model'),
+        'table_name' => 'users'
     ]
 ];

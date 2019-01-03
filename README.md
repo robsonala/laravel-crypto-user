@@ -4,6 +4,12 @@ Cryptography tools for Laravel linked with User's table including Eloquent suppo
 [![Build Status](https://travis-ci.org/robsonala/laravel-crypto-user.svg?branch=master)](https://travis-ci.org/robsonala/laravel-crypto-user)
 
 ***
+## Installation:
+```
+php artisan vendor:publish
+// Select `Robsonala\CryptoUser\CryptoUserProvider`
+php artisan migrate
+```
 
 ## Tutorial:
 
