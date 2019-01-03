@@ -1,5 +1,5 @@
 {
-    "name": "robsonala/laravel-crypto-user_",
+    "name": "robsonala/laravel-crypto-user",
     "version": "0.2.1",
     "description": "Cryptography tools for Laravel linked with User's table including Eloquent support",
     "type": "library",
