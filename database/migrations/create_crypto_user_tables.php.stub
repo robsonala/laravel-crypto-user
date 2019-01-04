@@ -32,7 +32,6 @@ class CreateCryptoUserTables extends Migration
         Schema::create($tables['passphrases'], function (Blueprint $table) use ($userTable) {
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('related_user_id');
-            $table->string('passphrase');
             $table->timestamps();
 
             $table->foreign('user_id')
