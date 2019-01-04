@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -44,6 +45,8 @@ class CreateCryptoUserTables extends Migration
                 ->on($userTable)
                 ->onDelete('cascade');
         });
+
+        DB::statement('ALTER TABLE `' . $tables['passphrases'] . '` ADD `passphrase` VARBINARY(255)');
     }
 
     /**
