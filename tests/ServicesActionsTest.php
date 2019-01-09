@@ -60,10 +60,10 @@ class ServicesActionsTest extends TestCase
     {
         $password = uniqid();
         $user = $this->createUser(['password' => $password]);
-        Actions::register($user, $password);
+        $passphrase = Actions::register($user, $password);
 
         $newPassword = uniqid();
-        Actions::updatePassword($user, $password, $newPassword);
+        $passphraseAfterUpdate = Actions::updatePassword($user, $password, $newPassword);
 
         $user = User::find($user->id);
 
@@ -72,6 +72,8 @@ class ServicesActionsTest extends TestCase
             'privatekey' => $user->cryptoKeys->private_key,
             'password' => $newPassword
         ]);
+
+        $this->assertEquals($passphrase, $passphraseAfterUpdate);
 
         // Shall fail
         try {

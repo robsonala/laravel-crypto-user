@@ -87,6 +87,8 @@ class Actions
             'private_key' => $keyPair->getPrivateKey(),
             'public_key' => $keyPair->getPublicKey(),
         ]);
+
+        return $keyPair->decrypt($user->cryptoPassphrase->passphrase);
     }
 
     /**
