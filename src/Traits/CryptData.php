@@ -26,7 +26,7 @@ trait CryptData
      */
     public function setAttribute($key, $value)
     {
-        if (array_key_exists($key, array_flip($this->crypt_attributes))) {
+        if ($value && array_key_exists($key, array_flip($this->crypt_attributes))) {
             $value = CryptoUser::encryptText($value);
         }
         
@@ -41,7 +41,7 @@ trait CryptData
         $values = parent::toArray();
 
         foreach ($values as $key => &$value) {
-            if (array_key_exists($key, array_flip($this->crypt_attributes))) {
+            if ($value && array_key_exists($key, array_flip($this->crypt_attributes))) {
                 $value = CryptoUser::decryptText($value);
             }
         }
