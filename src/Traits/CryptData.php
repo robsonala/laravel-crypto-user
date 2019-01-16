@@ -13,7 +13,7 @@ trait CryptData
     {
         $value = parent::getAttribute($key);
         
-        if (array_key_exists($key, array_flip($this->crypt_attributes))) {
+        if ($value && array_key_exists($key, array_flip($this->crypt_attributes))) {
             $value = CryptoUser::decryptText($value);
         }
 
