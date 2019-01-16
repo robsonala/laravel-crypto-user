@@ -127,7 +127,7 @@ class ServicesCryptDataTest extends TestCase
         });
 
         try {
-            $model->title;
+            $model->title = 'Lorem ipsum dolor sit amet ' . uniqid();
 
             throw new \Exception('This test should fail');
         } catch (\ErrorException $e) {
