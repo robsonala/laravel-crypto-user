@@ -116,23 +116,4 @@ class ServicesCryptDataTest extends TestCase
             $this->assertTrue(true);
         }
     }
-
-    /** @test */
-    public function model_will_fail_if_i_set_trait_but_not_add_attr()
-    {
-        $model = (new class extends Model {
-            use CryptData;
-
-            protected $fillable = ['title'];
-        });
-
-        try {
-            $model->title = 'Lorem ipsum dolor sit amet ' . uniqid();
-
-            throw new \Exception('This test should fail');
-        } catch (\ErrorException $e) {
-            $this->assertContains('Undefined property', $e->getMessage());
-            $this->assertContains('$crypt_attributes', $e->getMessage());
-        }
-    }
 }
