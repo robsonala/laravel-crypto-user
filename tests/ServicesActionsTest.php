@@ -91,22 +91,26 @@ class ServicesActionsTest extends TestCase
     /** @test */
     public function i_can_share_my_passphrase_with_another_user()
     {
+        $passwordOwner = uniqid();
+        $userOwner = $this->createUser(['password' => $passwordOwner]);
+        $passphraseOwner = Actions::register($userOwner, $passwordOwner);
+
         $password1 = uniqid();
         $user1 = $this->createUser(['password' => $password1]);
         $passphrase1 = Actions::register($user1, $password1);
-
         $password2 = uniqid();
         $user2 = $this->createUser(['password' => $password2]);
         $passphrase2 = Actions::register($user2, $password2);
 
-        Actions::sharePassphrase($user1, $user2, $passphrase1);
+        // Create
+        Actions::sharePassphrase($userOwner, $user2, $passphraseOwner);
 
-        $items1 = DB::table(config('crypto-user.tables')['passphrases'])
-            ->where('user_id', $user1->id)->get();
+        $itemsOwner = DB::table(config('crypto-user.tables')['passphrases'])
+            ->where('user_id', $userOwner->id)->get();
         $items2 = DB::table(config('crypto-user.tables')['passphrases'])
             ->where('user_id', $user2->id)->get();
 
-        $this->assertCount(1, $items1);
+        $this->assertCount(1, $itemsOwner);
         $this->assertCount(2, $items2);
 
         $user2 = User::find($user2->id);
@@ -116,9 +120,20 @@ class ServicesActionsTest extends TestCase
             'password' => $password2
         ]);
 
-        $user1Passprhase = $keyPair2->decrypt($user2->cryptoPassphrasesShared[0]->passphrase);
+        $userOwnerPassprhase = $keyPair2->decrypt($user2->cryptoPassphrasesShared[0]->passphrase);
+        $this->assertEquals($passphraseOwner, $userOwnerPassprhase);
 
-        $this->assertEquals($passphrase1, $user1Passprhase);
+        // Update
+        Actions::sharePassphrase($userOwner, $user1, $passphraseOwner);
+        Actions::sharePassphrase($userOwner, $user2, $passphraseOwner);
+
+        $items1 = DB::table(config('crypto-user.tables')['passphrases'])
+            ->where('user_id', $user1->id)->get();
+        $items2 = DB::table(config('crypto-user.tables')['passphrases'])
+            ->where('user_id', $user2->id)->get();
+
+        $this->assertCount(2, $items1);
+        $this->assertCount(2, $items2);
     }
 
     /** @test */

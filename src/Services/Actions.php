@@ -112,9 +112,10 @@ class Actions
             'publickey' => $user->cryptoKeys->public_key
         ]);
 
-        CryptoPassphrases::create([
+        CryptoPassphrases::updateOrCreate([
             'user_id' => $user->id, 
-            'related_user_id' => $passphraseOwner->id, 
+            'related_user_id' => $passphraseOwner->id
+        ], [
             'passphrase' => $keyPair->encrypt($passphrase),
         ]);
     }
