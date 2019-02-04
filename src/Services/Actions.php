@@ -139,16 +139,12 @@ class Actions
      * 
      * @param Model $passphraseOwner    User that want to get the passphrase back
      * @param Model $user               User that will help
-     * @param string $password          Passphrase
+     * @param string $password          Password
      */
-    public static function recoverPassphrase(Model $passphraseOwner, Model $user, string $passphrase = '')
+    public static function recoverPassphrase(Model $passphraseOwner, Model $user, string $password = '')
     {
         if (!isset($user->cryptoKeys) || !isset($passphraseOwner->cryptoKeys)) {
             return;
-        }
-
-        if (!$passphrase) {
-            $passphrase = CryptoUser::getSessionPassphrase();
         }
 
         $keyPairOwner = new KeyPair([
@@ -156,7 +152,7 @@ class Actions
         ]);
         $keyPairProvider = new KeyPair([
             'privatekey' => $user->cryptoKeys->private_key,
-            'password' => $passphrase
+            'password' => $password
         ]);
 
         $decryptedPassphrase = $keyPairProvider->decrypt($user->cryptoPassphrasesShared($passphraseOwner->id)->passphrase);
