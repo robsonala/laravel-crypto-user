@@ -112,12 +112,26 @@ class Actions
             'publickey' => $user->cryptoKeys->public_key
         ]);
 
+        $model = CryptoPassphrases::where('user_id', $user->id)
+            ->where('related_user_id', $passphraseOwner->id);
+
+        if ($model->count() > 0){
+            $model->update(['passphrase' => $keyPair->encrypt($passphrase)]);
+        } else {
+            CryptoPassphrases::create([
+                'user_id' => $user->id, 
+                'related_user_id' => $passphraseOwner->id, 
+                'passphrase' => $keyPair->encrypt($passphrase)
+            ]);
+        }
+
+        /* TODO: check `updateOrCreate`
         CryptoPassphrases::updateOrCreate([
             'user_id' => $user->id, 
             'related_user_id' => $passphraseOwner->id
         ], [
             'passphrase' => $keyPair->encrypt($passphrase),
-        ]);
+        ]);*/
     }
 
     /**
