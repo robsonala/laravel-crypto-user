@@ -147,7 +147,19 @@ class ServicesActionsTest extends TestCase
         $user2 = $this->createUser(['password' => $password2]);
         $passphrase2 = Actions::register($user2, $password2);
 
+        $itemsUser1 = DB::table(config('crypto-user.tables')['passphrases'])->where('user_id', $user1->id)->get();
+        $itemsUser2 = DB::table(config('crypto-user.tables')['passphrases'])->where('user_id', $user2->id)->get();
+
+        $this->assertCount(1, $itemsUser1);
+        $this->assertCount(1, $itemsUser2);
+
         Actions::sharePassphrase($user1, $user2, $passphrase1);
+
+        $itemsUser1 = DB::table(config('crypto-user.tables')['passphrases'])->where('user_id', $user1->id)->get();
+        $itemsUser2 = DB::table(config('crypto-user.tables')['passphrases'])->where('user_id', $user2->id)->get();
+
+        $this->assertCount(1, $itemsUser1);
+        $this->assertCount(2, $itemsUser2);
 
         $user1 = User::find($user1->id);
         $user2 = User::find($user2->id);
