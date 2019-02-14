@@ -56,6 +56,17 @@ class ServicesActionsTest extends TestCase
     }
 
     /** @test */
+    public function i_can_login_without_crypto_keys_it_will_create()
+    {
+        $password = uniqid();
+        $user = $this->createUser(['password' => $password]);
+
+        $res = Actions::login($user, $password);
+        $this->assertEquals(CryptoUser::getSessionPassphrase(), $res);
+
+    }
+
+    /** @test */
     public function i_can_update_password()
     {
         $password = uniqid();
@@ -65,7 +76,7 @@ class ServicesActionsTest extends TestCase
         $newPassword = uniqid();
         $passphraseAfterUpdate = Actions::updatePassword($user, $password, $newPassword);
 
-        $user = User::find($user->id);
+        //$user = User::find($user->id);
 
         // Shall work
         new KeyPair([

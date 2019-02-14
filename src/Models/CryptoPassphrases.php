@@ -5,6 +5,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class CryptoPassphrases extends Model
 {
+    protected $primaryKey = ['user_id', 'related_user_id'];
+    public $incrementing = false;
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);

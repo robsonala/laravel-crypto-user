@@ -26,7 +26,6 @@ trait UserEncrypt
         } else {
             return $this->hasMany(CryptoPassphrases::class)
                 ->whereNotIn('related_user_id', [$this->id]);
-                //->whereNot('related_user_id', $this->id); TODO: check why it's not working :)
         }
     }
 }

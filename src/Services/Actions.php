@@ -16,12 +16,12 @@ class Actions
      */
     public static function login(Model $user, string $password): string
     {
-        $cryptoKeys = $user->cryptoKeys()->first();
-
-        // TODO : Generate keypair if the user doesn't have one
-        if (!isset($cryptoKeys)) {
-            return "";
+        if (!isset($user->cryptoKeys) || !isset($user->cryptoPassphrase)) {
+            self::register($user, $password);
         }
+
+        $cryptoKeys = $user->cryptoKeys()->first();
+        $cryptoPassphrase = $user->cryptoPassphrase()->first();
 
         $keyPair = new KeyPair([
             'publickey' => $cryptoKeys->public_key,
@@ -29,7 +29,7 @@ class Actions
             'password' => $password
         ]);
 
-        CryptoUser::setSessionPassphrase($keyPair->decrypt($user->cryptoPassphrase()->first()->passphrase));
+        CryptoUser::setSessionPassphrase($keyPair->decrypt($cryptoPassphrase->passphrase));
 
         return CryptoUser::getSessionPassphrase();
     }
@@ -45,7 +45,7 @@ class Actions
         $keyPair = new KeyPair();
         $keyPair->generate($password);
 
-        CryptoUser::setSessionPassphrase();
+        $passphrase = CryptoUser::setSessionPassphrase();
 
         CryptoKeys::create([
             'user_id' => $user->id, 
@@ -56,10 +56,10 @@ class Actions
         CryptoPassphrases::create([
             'user_id' => $user->id, 
             'related_user_id' => $user->id, 
-            'passphrase' => $keyPair->encrypt(CryptoUser::getSessionPassphrase()),
+            'passphrase' => $keyPair->encrypt($passphrase),
         ]);
 
-        return CryptoUser::getSessionPassphrase();
+        return $passphrase;
     }
 
     /**
@@ -84,13 +84,21 @@ class Actions
         ]);
 
         $keyPair->setNewPassword($newPassword);
+        
+        $model = CryptoKeys::where('user_id', $user->id)->first();
 
-        CryptoKeys::where('user_id', $user->id)->delete();
-        CryptoKeys::create([
-            'user_id' => $user->id, 
-            'private_key' => $keyPair->getPrivateKey(),
-            'public_key' => $keyPair->getPublicKey(),
-        ]);
+        if ($model->count() > 0){
+            $model->update([
+                'private_key' => $keyPair->getPrivateKey(),
+                'public_key' => $keyPair->getPublicKey()
+            ]);
+        } else {
+            CryptoKeys::create([
+                'user_id' => $user->id, 
+                'private_key' => $keyPair->getPrivateKey(),
+                'public_key' => $keyPair->getPublicKey(),
+            ]);
+        }
 
         return $keyPair->decrypt($user->cryptoPassphrase()->first()->passphrase);
     }
@@ -122,7 +130,9 @@ class Actions
             ->where('related_user_id', $passphraseOwner->id);
 
         if ($model->count() > 0){
-            $model->update(['passphrase' => $keyPair->encrypt($passphrase)]);
+            $model->update([
+                'passphrase' => $keyPair->encrypt($passphrase)
+            ]);
         } else {
             CryptoPassphrases::create([
                 'user_id' => $user->id, 
@@ -130,14 +140,6 @@ class Actions
                 'passphrase' => $keyPair->encrypt($passphrase)
             ]);
         }
-
-        /* TODO: check `updateOrCreate`
-        CryptoPassphrases::updateOrCreate([
-            'user_id' => $user->id, 
-            'related_user_id' => $passphraseOwner->id
-        ], [
-            'passphrase' => $keyPair->encrypt($passphrase),
-        ]);*/
     }
 
     /**
