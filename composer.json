@@ -1,6 +1,6 @@
 {
     "name": "robsonala/laravel-crypto-user",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "description": "Cryptography tools for Laravel linked with User's table including Eloquent support",
     "type": "library",
     "license": "MIT",
