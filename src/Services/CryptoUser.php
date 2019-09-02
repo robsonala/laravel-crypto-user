@@ -32,7 +32,7 @@ class CryptoUser
             throw new CryptoUserException('Passphrase not set');
         }
 
-        return Crypt::decryptString(Session::get(self::PASSPHRASE_SESSION));
+        return Crypt::decrypt(Session::get(self::PASSPHRASE_SESSION), false);
     }
 
     public static function encryptText(string $value): string
