@@ -21,7 +21,7 @@ class CryptoUser
             throw new CryptoUserException('The passphrase must to have 32 alphanumeric characters.');
         }
 
-        Session::put(self::PASSPHRASE_SESSION, Crypt::encryptString($value));
+        Session::put(self::PASSPHRASE_SESSION, Crypt::encrypt($value, false));
 
         return $value;
     }
@@ -32,7 +32,7 @@ class CryptoUser
             throw new CryptoUserException('Passphrase not set');
         }
 
-        return Crypt::decryptString(Session::get(self::PASSPHRASE_SESSION));
+        return Crypt::decrypt(Session::get(self::PASSPHRASE_SESSION), false);
     }
 
     public static function encryptText(string $value): string
